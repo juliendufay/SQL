@@ -13,8 +13,8 @@ CREATE DATABASE gescom;
 USE gescom;
 
 CREATE TABLE Price(
-   Id_Price SMALLINT,
-   HT_price SMALLINT NOT NULL,
+   Id_Price VARCHAR(50),
+   HT_price DECIMAL,
    discount VARCHAR(50),
    PRIMARY KEY(Id_Price)
 );
@@ -89,10 +89,7 @@ CREATE TABLE Product(
    Id_Price VARCHAR(50) NOT NULL,
    Id_Catégorie VARCHAR(50) NOT NULL,
    Id_provider VARCHAR(50) NOT NULL,
-   PRIMARY KEY(Id_Product),
-   FOREIGN KEY(Id_Price) REFERENCES Price(Id_Price),
-   FOREIGN KEY(Id_Catégorie) REFERENCES Sub_Categorie(Id_Catégorie),
-   FOREIGN KEY(Id_provider) REFERENCES provider(Id_provider)
+   PRIMARY KEY(Id_Product)
 );
 
 CREATE TABLE Buy(
@@ -100,25 +97,47 @@ CREATE TABLE Buy(
    Id_Seller VARCHAR(50),
    Id_Orders VARCHAR(50),
    Payment_Method VARCHAR(50),
-   PRIMARY KEY(Id_Product, Id_Seller, Id_Orders),
-   FOREIGN KEY(Id_Product) REFERENCES Product(Id_Product),
-   FOREIGN KEY(Id_Seller) REFERENCES Buyer(Id_Seller),
-   FOREIGN KEY(Id_Orders) REFERENCES Orders(Id_Orders)
+   PRIMARY KEY(Id_Product, Id_Seller, Id_Orders)
 );
 
 CREATE TABLE Occupy(
    Id_Product VARCHAR(50),
    Id_Employé VARCHAR(50),
-   PRIMARY KEY(Id_Product, Id_Employé),
-   FOREIGN KEY(Id_Product) REFERENCES Product(Id_Product),
-   FOREIGN KEY(Id_Employé) REFERENCES Employee(Id_Employé)
+   PRIMARY KEY(Id_Product, Id_Employé)
 );
 
 CREATE TABLE Sort_out(
    Id_Catégorie VARCHAR(50),
    Id_Categorie VARCHAR(50),
-   PRIMARY KEY(Id_Catégorie, Id_Categorie),
-   FOREIGN KEY(Id_Catégorie) REFERENCES Sub_Categorie(Id_Catégorie),
-   FOREIGN KEY(Id_Categorie) REFERENCES Categorie(Id_Categorie)
+   PRIMARY KEY(Id_Catégorie, Id_Categorie)
 );
 
+ALTER TABLE Product 
+ADD CONSTRAINT fk_product_Price FOREIGN KEY(Id_Price) REFERENCES Price(Id_Price);
+
+ALTER TABLE Product 
+ADD CONSTRAINT fk_product_Catégorie FOREIGN KEY(Id_Catégorie) REFERENCES Sub_Categorie(Id_Catégorie);
+
+ALTER TABLE Product 
+ADD CONSTRAINT fk_product_provider FOREIGN KEY(Id_provider) REFERENCES provider(Id_provider);
+
+ALTER TABLE Buy 
+ADD CONSTRAINT fk_Buy_Product FOREIGN KEY(Id_Product) REFERENCES Product(Id_Product);
+
+ALTER TABLE Buy 
+ADD CONSTRAINT fk_Buy_Seller FOREIGN KEY(Id_Seller) REFERENCES Buyer(Id_Seller);
+
+ALTER TABLE Buy 
+ADD CONSTRAINT fk_Buy_Orders FOREIGN KEY(Id_Orders) REFERENCES Orders(Id_Orders);
+
+ALTER TABLE Occupy 
+ADD CONSTRAINT fk_Occupy_Product FOREIGN KEY(Id_Product) REFERENCES Product(Id_Product);
+
+ALTER TABLE Occupy 
+ADD CONSTRAINT fk_Occupy_Employé FOREIGN KEY(Id_Employé) REFERENCES Employee(Id_Employé);
+
+ALTER TABLE Sort_out 
+ADD CONSTRAINT fk_Sort_out_Catégorie FOREIGN KEY(Id_Catégorie) REFERENCES Sub_Categorie(Id_Catégorie);
+
+ALTER TABLE Sort_out 
+ADD CONSTRAINT fk_Sort_out_Categorie FOREIGN KEY(Id_Categorie) REFERENCES Categorie(Id_Categorie);
